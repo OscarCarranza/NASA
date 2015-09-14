@@ -16,4 +16,12 @@ public class Grafo {
    public Planet getPlanetIn(int i){
        return grafo.get(i);
    }
+   
+   public void removePlanetIn(int i){
+       grafo.remove(i);
+   }
+   
+   public ArrayList <Planet> getPlanets(){
+       return grafo;
+   }
 }

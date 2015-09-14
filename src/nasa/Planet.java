@@ -48,6 +48,7 @@ public class Planet {
     public void setRoutes(ArrayList<Route> routes) {
         this.routes = routes;
     }
+    
 
     
     public void addRoute(Planet destiny, int distance){
