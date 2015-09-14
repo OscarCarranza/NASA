@@ -55,6 +55,11 @@ public class Planet {
         routes.add(newPath);
     }
     
+    @Override
+    public String toString(){
+        return name;
+    }
+    
     
     
     

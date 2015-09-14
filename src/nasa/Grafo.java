@@ -12,4 +12,8 @@ public class Grafo {
    public void addPlanet(Planet p){
        grafo.add(p);
    }
+   
+   public Planet getPlanetIn(int i){
+       return grafo.get(i);
+   }
 }
