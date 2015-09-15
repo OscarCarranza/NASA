@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Planet {
 
     private String name;
-    private ArrayList <Route> routes = new ArrayList();
     private int XCoordinate;
     private int YCoordinate;
     
@@ -20,7 +19,7 @@ public class Planet {
     public String getName() {
         return name;
     }
-
+    
     public int getXCoordinate() {
         return XCoordinate;
     }
@@ -39,21 +38,6 @@ public class Planet {
 
     public void setName(String nombre) {
         this.name = nombre;
-    }
-
-    public ArrayList<Route> getRoutes() {
-        return routes;
-    }
-
-    public void setRoutes(ArrayList<Route> routes) {
-        this.routes = routes;
-    }
-    
-
-    
-    public void addRoute(Planet destiny, int distance){
-        Route newPath = new Route(this,destiny,distance);
-        routes.add(newPath);
     }
     
     @Override

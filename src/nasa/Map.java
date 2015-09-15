@@ -45,6 +45,7 @@ public class Map extends javax.swing.JFrame {
         
         start.addItem("NO SELECTION");
         destiny.addItem("NO SELECTION");
+        destination.addItem("NO SELECTION");
 
     }
 
@@ -100,11 +101,14 @@ public class Map extends javax.swing.JFrame {
         plus = new javax.swing.JLabel();
         delete = new javax.swing.JLabel();
         planet = new javax.swing.JLabel();
+        ok_button = new javax.swing.JLabel();
         warp = new javax.swing.JLabel();
+        destination = new javax.swing.JComboBox();
         travel = new javax.swing.JLabel();
         JNS = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         map = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         jPanel1.setLayout(null);
 
@@ -407,6 +411,15 @@ public class Map extends javax.swing.JFrame {
         mainScreen.add(planet);
         planet.setBounds(810, 200, 370, 74);
 
+        ok_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/ok_button.png"))); // NOI18N
+        ok_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ok_buttonMouseClicked(evt);
+            }
+        });
+        mainScreen.add(ok_button);
+        ok_button.setBounds(1100, 330, 50, 44);
+
         warp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/warpN.png"))); // NOI18N
         warp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -414,7 +427,15 @@ public class Map extends javax.swing.JFrame {
             }
         });
         mainScreen.add(warp);
-        warp.setBounds(960, 330, 90, 43);
+        warp.setBounds(840, 330, 90, 43);
+
+        destination.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                destinationItemStateChanged(evt);
+            }
+        });
+        mainScreen.add(destination);
+        destination.setBounds(930, 340, 150, 25);
 
         travel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/travel.png"))); // NOI18N
         mainScreen.add(travel);
@@ -432,7 +453,11 @@ public class Map extends javax.swing.JFrame {
 
         map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/screen.png"))); // NOI18N
         mainScreen.add(map);
-        map.setBounds(0, -10, 1200, 640);
+        map.setBounds(0, -10, 1200, 630);
+
+        jButton3.setText("jButton3");
+        mainScreen.add(jButton3);
+        jButton3.setBounds(1080, 350, 81, 26);
 
         getContentPane().add(mainScreen);
         mainScreen.setBounds(0, 0, 1200, 630);
@@ -482,27 +507,45 @@ public class Map extends javax.swing.JFrame {
              newPlanet.setLocation(0,0);
              newPlanet.setSize(65,65);
 
-             String planet = "C:\\Users\\Oscar\\Documents\\NetBeansProjects\\NASA\\src\\nasa\\";
+             String newP = "C:\\Users\\Oscar\\Documents\\NetBeansProjects\\NASA\\src\\nasa\\";
              Random r = new Random();
+             int random = r.nextInt(11);
 
              boolean isThere = false;
 
-             String im = "p" + cont + ".png";
-             planet += im;
-             usedPlanets.add(im);
-
+             String im = "p" + random + ".png";
+             newP += im;
+             
+             
              BufferedImage image = null;
-                  File f = new File(planet);
+                  File f = new File(newP);
                   try {
                       image = ImageIO.read(f);
                   } catch (IOException ex) {
                       System.out.println("");
                   }
             newPlanet.setIcon(imageToIcon(image));
-            map.add(newPlanet);
             newPlanet.setLocation(x, y);
             newPlanet.setSize(image.getWidth(), image.getHeight());
             newPlanet.setVisible(true);
+            
+            //Add spaceship
+            if(cont == 0){
+                image = null;
+                f = new File("C:\\Users\\Oscar\\Documents\\NetBeansProjects\\NASA\\src\\nasa\\spaceship.png");
+                  try {
+                      image = ImageIO.read(f);
+                  } catch (IOException ex) {
+                      System.out.println("");
+                  }
+                spaceship.setLocation(x,y);
+                spaceship.setIcon(imageToIcon(image));
+                map.add(spaceship);
+                spaceship.setSize(image.getWidth(),image.getHeight());
+                spaceship.setVisible(true);
+             }
+            
+            map.add(newPlanet);
 
             //Add coordinates to arraylist
             coordinates.add(x);
@@ -530,7 +573,9 @@ public class Map extends javax.swing.JFrame {
             //Add item to comboBox
             start.addItem(p);
             destiny.addItem(p);
-        }  
+            destination.addItem(p);
+            
+        } 
        
         else{
             JOptionPane.showMessageDialog(map, "ERROR");
@@ -542,6 +587,8 @@ public class Map extends javax.swing.JFrame {
      CY.setValue(100);
      
      tf_name.setText("");
+     printLines();
+     map.repaint();
      
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -560,7 +607,7 @@ public class Map extends javax.swing.JFrame {
             labels.get(option-1).setBorder(BorderFactory.createLineBorder(Color.RED,3));
             start.setEnabled(false);
         }
-         
+        printLines();
     }//GEN-LAST:event_startItemStateChanged
 
     private void destinyItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_destinyItemStateChanged
@@ -569,38 +616,33 @@ public class Map extends javax.swing.JFrame {
             labels.get(option-1).setBorder(BorderFactory.createLineBorder(Color.RED,3));
             destiny.setEnabled(false);
         }
+        printLines();
     }//GEN-LAST:event_destinyItemStateChanged
 
     private void button_routeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button_routeMouseClicked
  
-       if(start.getSelectedIndex() == destiny.getSelectedIndex()){
+       if(start.getSelectedIndex() == destiny.getSelectedIndex() || start.getSelectedIndex() == 0 || destiny.getSelectedIndex() == 0){
            JOptionPane.showMessageDialog(map, "Invalid Route");
            start.setEnabled(true);
            destiny.setEnabled(true);
        }
        
        else{
-          Graphics g = getGraphics();
-          Graphics2D g2 = (Graphics2D) g;
-          g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-          g2.setPaint(Color.RED);
-          g2.setStroke(new BasicStroke(5));
-          g2.draw(new Line2D.Double((labels.get(start.getSelectedIndex()-1)).getX()+50,
-                                    (labels.get(start.getSelectedIndex()-1)).getY()+50,
-                                    (labels.get(destiny.getSelectedIndex()-1)).getX()+50,
-                                    (labels.get(destiny.getSelectedIndex()-1)).getY()+50)); 
-          
             for(int i = 0; i < labels.size(); i++){
                 labels.get(i).setBorder(null);
             }
+            
+            //Add route
+            grafo.addRoute(grafo.getPlanetIn(start.getSelectedIndex()-1),grafo.getPlanetIn(destiny.getSelectedIndex()-1),(int)sp_peso.getValue());
+            printLines();
+            printLines();
+            
             start.setSelectedIndex(0);
             destiny.setSelectedIndex(0);
             start.setEnabled(true);
-            destiny.setEnabled(true);
-            
-            //Add route
-            grafo.getPlanetIn(start.getSelectedIndex()).addRoute(grafo.getPlanetIn(destiny.getSelectedIndex()),(int)sp_peso.getValue());
+            destiny.setEnabled(true);     
        } 
+       
       
     }//GEN-LAST:event_button_routeMouseClicked
 
@@ -612,6 +654,7 @@ public class Map extends javax.swing.JFrame {
       InsertCoordinates.setLocation(882, 240);
       InsertCoordinates.setSize(383,210);
       InsertCoordinates.setVisible(true);
+      printLines();
     }//GEN-LAST:event_plusMouseClicked
 
     private void warpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_warpMouseClicked
@@ -666,7 +709,6 @@ public class Map extends javax.swing.JFrame {
       for(int i = 0; i < grafo.getPlanets().size(); i++){
           cb_edit.addItem(grafo.getPlanets().get(i));
       }
-        System.out.println("SE LIMPIO CB START");
         
       EditPlanet.dispose();
       EditPlanet.setUndecorated(true);
@@ -722,6 +764,7 @@ public class Map extends javax.swing.JFrame {
         }
         
         cb_delete.setEnabled(false);
+        printLines();
     }//GEN-LAST:event_cb_deleteItemStateChanged
 
     private void cb_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_deleteActionPerformed
@@ -739,10 +782,12 @@ public class Map extends javax.swing.JFrame {
             map.repaint();
             System.out.println("Delete label in" + (cb_delete.getSelectedIndex()-1));
             labels.remove(cb_delete.getSelectedIndex()-1);
-
             
             //Remove from graph
+            Planet selectedP = grafo.getPlanetIn(cb_delete.getSelectedIndex()-1);
+            grafo.removeRoutesOf(selectedP);
             grafo.removePlanetIn(cb_delete.getSelectedIndex()-1);
+            
             DeletePlanet.setVisible(false);
             cont--;
             
@@ -767,17 +812,22 @@ public class Map extends javax.swing.JFrame {
                 System.out.println(coordinate);
             }
             
+            destination.removeAllItems();
+            destination.addItem("NO SELECTION");
+            for(int i = 0; i < grafo.getPlanets().size(); i++){
+                destination.addItem(grafo.getPlanets().get(i));
+            }
+            destination.repaint();
+            destination.revalidate();
+          
             //Delete coordinates
             coordinates.remove(cb_delete.getSelectedIndex()*2-1);
             coordinates.remove(cb_delete.getSelectedIndex()*2-2);
             
-            
-            for (Object coordinate : coordinates) {
-                System.out.println(coordinate);
-            }
+            printLines();
 
         }
-       
+        printLines();
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -802,6 +852,7 @@ public class Map extends javax.swing.JFrame {
       DeletePlanet.setLocation(882, 240);
       DeletePlanet.setSize(383,210);
       DeletePlanet.setVisible(true);
+      printLines();
     }//GEN-LAST:event_deleteMouseClicked
 
     private void cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseClicked
@@ -815,7 +866,39 @@ public class Map extends javax.swing.JFrame {
     private void cancel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel2MouseClicked
         InsertCoordinates.setVisible(false);
     }//GEN-LAST:event_cancel2MouseClicked
+
+    private void ok_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ok_buttonMouseClicked
+        //TRAVEL
+        Thread hilo = new TravelingSpaceship(this);       
+        hilo.start();
+    }//GEN-LAST:event_ok_buttonMouseClicked
+
+    private void destinationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_destinationItemStateChanged
+        if(destination.getSelectedIndex() == 0){
+            
+        }
+        else{
+             planetDest = grafo.getPlanetIn(destination.getSelectedIndex()-1);
+        }
+       
+    }//GEN-LAST:event_destinationItemStateChanged
   
+    private void printLines(){
+        if(start.getSelectedIndex() != 0 && destiny.getSelectedIndex() != 0){
+            Graphics g = getGraphics();
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setPaint(Color.RED);
+            g2.setStroke(new BasicStroke(5));
+            
+            for (int i = 0; i < grafo.getRoutes().size(); i++) {
+            g2.draw(new Line2D.Double((grafo.getRoutes().get(i)).getNodo1().getXCoordinate()+30,
+                    (grafo.getRoutes().get(i)).getNodo1().getYCoordinate()+20,
+                    (grafo.getRoutes().get(i)).getNodo2().getXCoordinate()+30,
+                    (grafo.getRoutes().get(i)).getNodo2().getYCoordinate()+20));
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -872,10 +955,12 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JComboBox cb_edit;
     private javax.swing.JLabel close_button;
     private javax.swing.JLabel delete;
+    private javax.swing.JComboBox destination;
     private javax.swing.JComboBox destiny;
     private javax.swing.JLabel edit;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
@@ -892,6 +977,7 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel mainScreen;
     private javax.swing.JLabel map;
+    private javax.swing.JLabel ok_button;
     private javax.swing.JLabel planet;
     private javax.swing.JLabel plus;
     private javax.swing.JLabel route;
@@ -905,7 +991,9 @@ public class Map extends javax.swing.JFrame {
     ArrayList <String> usedPlanets = new ArrayList();
     ArrayList coordinates = new ArrayList();
     ArrayList <JLabel> labels = new ArrayList();
+    JLabel spaceship = new JLabel();
     Grafo grafo = new Grafo();
     int cont;
+    Planet planetDest;
     boolean selectedWarp = false;
 }
