@@ -1,14 +1,16 @@
 
 package nasa;
 
-import nasa.Route;
 import java.util.ArrayList;
+
 
 public class Planet {
 
     private String name;
     private int XCoordinate;
     private int YCoordinate;
+    private ArrayList <Planet> neighbors = new ArrayList();
+    boolean isVisited = false;
     
     public Planet(String name, int XCoordinate, int YCoordinate) {
         this.name = name;
@@ -38,6 +40,22 @@ public class Planet {
 
     public void setName(String nombre) {
         this.name = nombre;
+    }
+    
+    public void addNeighbor(Planet a){
+        neighbors.add(a);
+    }
+    
+    public ArrayList <Planet> getNeighbors(){
+        return neighbors;
+    }
+    
+    public boolean isVisited(){
+        return isVisited;
+    }
+    
+    public void setVisited(){
+        isVisited = true;
     }
     
     @Override

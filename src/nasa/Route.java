@@ -39,8 +39,6 @@ public class Route {
         this.peso = peso;
     }
     
-    
-    
     public Route(){
 
     }

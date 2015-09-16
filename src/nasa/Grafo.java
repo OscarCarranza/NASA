@@ -51,4 +51,26 @@ public class Grafo {
         Route newPath = new Route(start,destiny,distance);
         routes.add(newPath);
     }
+    
+    public int Travel(int pesoTot,Planet a, Planet b){
+        
+        ArrayList <Route> paths = this.getRoutes();
+        int cont = 0, temp = 0;
+        for(int i = 0; i < paths.size(); i++){
+            if(paths.get(i).getNodo1() == a || paths.get(i).getNodo2() == a){
+                int p = paths.get(i).getPeso(); 
+                if(cont == 1){
+                    pesoTot = Math.min(p, temp);
+                    cont = 0;
+                }
+                temp = p;
+                cont++;
+            }
+        }
+        
+        
+        
+        return 0;
+    }
+    
 }

@@ -175,7 +175,7 @@ public class TravelingSpaceship extends Thread{
                     flag = true;
                 }
                 try {
-                    sleep(5);
+                    sleep(1);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
