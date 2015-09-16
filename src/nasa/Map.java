@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import static java.lang.StrictMath.abs;
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -114,10 +114,18 @@ public class Map extends javax.swing.JFrame {
         sfer = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        Routes = new javax.swing.JDialog();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        routesPane = new javax.swing.JTextArea();
+        cancel3 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        background2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         close = new javax.swing.JLabel();
         plus = new javax.swing.JLabel();
+        addRoute = new javax.swing.JLabel();
         delete = new javax.swing.JLabel();
         edit = new javax.swing.JLabel();
         ok_button = new javax.swing.JLabel();
@@ -404,7 +412,52 @@ public class Map extends javax.swing.JFrame {
 
         Welcome.getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        jLabel17.setText("jLabel17");
+        jPanel6.setLayout(null);
+
+        routesPane.setColumns(20);
+        routesPane.setRows(5);
+        jScrollPane1.setViewportView(routesPane);
+
+        jPanel6.add(jScrollPane1);
+        jScrollPane1.setBounds(50, 70, 280, 80);
+
+        cancel3.setFont(new java.awt.Font("Star Jedi", 1, 12)); // NOI18N
+        cancel3.setText("cancel");
+        cancel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancel3MouseClicked(evt);
+            }
+        });
+        jPanel6.add(cancel3);
+        cancel3.setBounds(230, 170, 110, 20);
+
+        jLabel2.setFont(new java.awt.Font("Star Jedi", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 255, 255));
+        jLabel2.setText("routes");
+        jPanel6.add(jLabel2);
+        jLabel2.setBounds(150, 40, 90, 30);
+
+        jButton3.setFont(new java.awt.Font("Star Jedi", 1, 12)); // NOI18N
+        jButton3.setText("accept");
+        jButton3.setBorderPainted(false);
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jButton3);
+        jButton3.setBounds(40, 170, 110, 20);
+
+        background2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/Coordinates.png"))); // NOI18N
+        jPanel6.add(background2);
+        background2.setBounds(0, 0, 384, 210);
+
+        Routes.getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -427,7 +480,16 @@ public class Map extends javax.swing.JFrame {
             }
         });
         jPanel5.add(plus);
-        plus.setBounds(1120, 290, 50, 50);
+        plus.setBounds(1110, 290, 50, 50);
+
+        addRoute.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/add_sign.png"))); // NOI18N
+        addRoute.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addRouteMouseClicked(evt);
+            }
+        });
+        jPanel5.add(addRoute);
+        addRoute.setBounds(730, 570, 50, 50);
 
         delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/delete_sign.png"))); // NOI18N
         delete.setText("delete");
@@ -464,7 +526,7 @@ public class Map extends javax.swing.JFrame {
             }
         });
         jPanel5.add(export);
-        export.setBounds(740, 550, 90, 90);
+        export.setBounds(780, 550, 90, 90);
 
         warp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nasa/warpN.png"))); // NOI18N
         warp.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -801,7 +863,7 @@ public class Map extends javax.swing.JFrame {
       EditPlanet.setUndecorated(true);
       EditPlanet.pack();
       EditPlanet.setModal(true);
-      EditPlanet.setLocation(862, 280);
+      EditPlanet.setLocation(890, 270);
       EditPlanet.setSize(380,210);
       EditPlanet.setVisible(true);
       
@@ -930,7 +992,7 @@ public class Map extends javax.swing.JFrame {
       DeletePlanet.setUndecorated(true);
       DeletePlanet.pack();
       DeletePlanet.setModal(true);
-      DeletePlanet.setLocation(862, 280);
+      DeletePlanet.setLocation(890, 270);
       DeletePlanet.setSize(380,210);
       DeletePlanet.setVisible(true);
       printLines();
@@ -999,40 +1061,69 @@ public class Map extends javax.swing.JFrame {
     }//GEN-LAST:event_destinyActionPerformed
 
     private void exportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exportMouseClicked
-        Date d = new Date();
-        
-        File folder = null;
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Select target directory");
-        chooser.setLocation(500, 500);
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int returnVal = chooser.showOpenDialog(this);
-        if(returnVal == JFileChooser.APPROVE_OPTION) 
-            folder = chooser.getSelectedFile();
-        
-        String path = chooser.getSelectedFile().getAbsolutePath();
-        
-        String text = "";
- 
+        String sb = "";
         try{
-            FileReader lector= new FileReader("Routes" + contFile + ".NCII");
-            BufferedReader content = new BufferedReader(lector);
-            while((text = content.readLine())!=null){
-                text += content.readLine();
+            BufferedReader br = new BufferedReader(new FileReader("Routes.txt"));
+            try {               
+                String line = br.readLine();
+                while (line != null) {
+                    sb+=line;
+                    sb+="\n";
+                    line = br.readLine();
+                }
+                String everything = sb.toString();
+            } finally {
+                br.close();
             }
+        }
+        catch(Exception e){
             
-            for(int i = 0; i< grafo.getRoutes().size(); i++){
-                text += grafo.getRoutes().get(i).toString();
-                System.out.println(grafo.getRoutes().get(i).toString());
-            }
+        }
+        
+        routesPane.setText(sb);
+        Routes.pack();
+        Routes.setModal(true);
+        Routes.dispose();
+        Routes.setUndecorated(true);
+        Routes.setLocation(890, 455);
+        Routes.setSize(380,210);
+        Routes.setVisible(true);
+
+    }//GEN-LAST:event_exportMouseClicked
+
+    private void addRouteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addRouteMouseClicked
+        Date d = new Date();
+       
+        File archivo = new File("Routes.txt");
+
+        try{
+        FileWriter escribir = new FileWriter(archivo,true);
+        escribir.write(d.toString() + "\n");
+        for(int i = 0; i < grafo.getRoutes().size(); i++){
+            escribir.append("+ " + grafo.getRoutes().get(i).toString() + "\n");
+        }
+        escribir.close();
         }
 
-        catch(Exception e){
-            System.out.println("Error al leer");
+        //Si existe un problema al escribir cae aqui
+        catch(Exception e)
+        {
+        System.out.println("Error al escribir");
         }
-        contFile++;
         
-    }//GEN-LAST:event_exportMouseClicked
+    }//GEN-LAST:event_addRouteMouseClicked
+
+    private void cancel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel3MouseClicked
+        Routes.setVisible(false);
+    }//GEN-LAST:event_cancel3MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
   
     protected void printLines(){
         if(start.getSelectedIndex() != 0 && destiny.getSelectedIndex() != 0){
@@ -1049,7 +1140,6 @@ public class Map extends javax.swing.JFrame {
                     (grafo.getRoutes().get(i)).getNodo2().getYCoordinate()+120));
             }
         }
-        map.repaint();
     }
     
         private Image Resize(Image img, int h, int w){
@@ -1106,14 +1196,18 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JDialog EditPlanet;
     private javax.swing.JDialog InsertCoordinates;
     private javax.swing.JLabel JNS;
+    private javax.swing.JDialog Routes;
     private javax.swing.JDialog Welcome;
+    private javax.swing.JLabel addRoute;
     private javax.swing.JLabel background;
     private javax.swing.JLabel background1;
+    private javax.swing.JLabel background2;
     private javax.swing.JLabel background3;
     private javax.swing.JButton button_route;
     private javax.swing.JButton cancel;
     private javax.swing.JButton cancel1;
     private javax.swing.JButton cancel2;
+    private javax.swing.JButton cancel3;
     private javax.swing.JComboBox cb_delete;
     private javax.swing.JComboBox cb_edit;
     private javax.swing.JLabel close;
@@ -1124,6 +1218,7 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JLabel export;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
@@ -1133,8 +1228,8 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1147,11 +1242,14 @@ public class Map extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel map;
     private javax.swing.JLabel ok_button;
     private javax.swing.JLabel planet;
     private javax.swing.JLabel plus;
     private javax.swing.JLabel route;
+    private javax.swing.JTextArea routesPane;
     private javax.swing.JLabel sfer;
     private javax.swing.JSpinner sp_peso;
     private javax.swing.JComboBox start;
