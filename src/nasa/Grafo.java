@@ -55,22 +55,40 @@ public class Grafo {
     public int Travel(int pesoTot,Planet a, Planet b){
         
         ArrayList <Route> paths = this.getRoutes();
-        int cont = 0, temp = 0;
+        int cont = 0, temp = 0, contTemp = 0;
+        Planet dest = null;
         for(int i = 0; i < paths.size(); i++){
             if(paths.get(i).getNodo1() == a || paths.get(i).getNodo2() == a){
+                cont++;
                 int p = paths.get(i).getPeso(); 
-                if(cont == 1){
+                if(cont == 2){
                     pesoTot = Math.min(p, temp);
+                    if(p == pesoTot && paths.get(i).getNodo1() == a){
+                        dest = paths.get(i).getNodo2();
+                    }
+                    else if(p == pesoTot && paths.get(i).getNodo2() == a){
+                        dest = paths.get(i).getNodo1();
+                    }
+                    else if(temp == pesoTot && paths.get(contTemp).getNodo1() == a){
+                        dest = paths.get(contTemp).getNodo2();
+                    }
+                    else if(temp == pesoTot && paths.get(contTemp).getNodo2() == a){
+                        dest = paths.get(contTemp).getNodo1();
+                    }
                     cont = 0;
                 }
+                contTemp = i;
                 temp = p;
-                cont++;
             }
+            contTemp++;
         }
         
-        
-        
-        return 0;
+         if(b == dest){
+             return pesoTot;
+         }
+         else{
+             return Travel(pesoTot,dest,b);
+         }
     }
     
 }

@@ -55,7 +55,7 @@ public class Planet {
     }
     
     public void setVisited(){
-        isVisited = true;
+        isVisited = !isVisited;
     }
     
     @Override

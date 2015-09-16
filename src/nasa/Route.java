@@ -45,7 +45,7 @@ public class Route {
 
     @Override
     public String toString() {
-        return "Route{" + "nodo1=" + nodo1.getName() + ", nodo2=" + nodo2.getName() + ", peso=" + peso + '}';
+        return nodo1.getName() + " -- " + peso + " -->" + nodo2.getName();
     }
     
     

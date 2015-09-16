@@ -55,6 +55,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                map.printLines(); 
             }
         }
         
@@ -67,6 +68,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                map.printLines(); 
             }
         }
         
@@ -79,6 +81,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                map.printLines(); 
             }
         }
         
@@ -91,6 +94,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                map.printLines(); 
             }
         }
         
@@ -113,7 +117,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                map.repaint();
+                map.printLines(); 
             }
         }
         else if(CX1 > CX2 && CY1 < CY2){
@@ -135,7 +139,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                map.repaint();
+                map.printLines(); 
             }
         }
         else if(CX1 < CX2 && CY1 > CY2){
@@ -157,7 +161,7 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                map.repaint();
+                map.printLines(); 
             }
         }
         else if(CX1 > CX2 && CY1 > CY2){
@@ -179,10 +183,11 @@ public class TravelingSpaceship extends Thread{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TravelingSpaceship.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                map.printLines(); 
             }
         }
         map.spaceship.setLocation(map.planetDest.getXCoordinate(),map.planetDest.getYCoordinate());
-        
+        map.printLines();      
     }
     
     public void reduceToLowestTerms() {
